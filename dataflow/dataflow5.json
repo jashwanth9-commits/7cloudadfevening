@@ -1,0 +1,70 @@
+{
+	"name": "dataflow5",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText30",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Json5",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "filter1"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     param1 as string",
+				"}",
+				"source(output(",
+				"          ID as short,",
+				"          Firstname as string,",
+				"          LastName as string,",
+				"          City as string,",
+				"          StartDate as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 filter(City == $param1) ~> filter1",
+				"filter1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          MovieID as integer,",
+				"          Title as string,",
+				"          Genre as string,",
+				"          Rating as double,",
+				"          OrderID as integer,",
+				"          Customer as string,",
+				"          OrderDate as string,",
+				"          Amount as integer,",
+				"          StudentID as integer,",
+				"          Name as string,",
+				"          Grade as string,",
+				"          Age as integer",
+				"     ),",
+				"     partitionFileNames:['oytput2908.josn'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

@@ -1,0 +1,68 @@
+{
+	"name": "Json2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"filename": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().filename",
+					"type": "Expression"
+				},
+				"fileSystem": "input-data"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"MovieID": {
+					"type": "integer"
+				},
+				"Title": {
+					"type": "string"
+				},
+				"Genre": {
+					"type": "string"
+				},
+				"Rating": {
+					"type": "number"
+				},
+				"OrderID": {
+					"type": "integer"
+				},
+				"Customer": {
+					"type": "string"
+				},
+				"OrderDate": {
+					"type": "string"
+				},
+				"Amount": {
+					"type": "integer"
+				},
+				"StudentID": {
+					"type": "integer"
+				},
+				"Name": {
+					"type": "string"
+				},
+				"Grade": {
+					"type": "string"
+				},
+				"Age": {
+					"type": "integer"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

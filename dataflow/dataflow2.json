@@ -1,0 +1,72 @@
+{
+	"name": "dataflow2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText25",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText26",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "split1"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "union1"
+				},
+				{
+					"name": "union2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EmpID as short,",
+				"          EmpName as string,",
+				"          DeptID as double,",
+				"          Salary as integer,",
+				"          JoinDate as date,",
+				"          Location as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 split(equals(Location,\"Hyderabad\"),",
+				"     and(equals(Location,\"Delhi\"),(greater(Salary, 70000))),",
+				"     disjoint: false) ~> split1@(Hyd, Del, Others)",
+				"split1@Hyd filter(equals(DeptID, 10)) ~> filter1",
+				"filter1, split1@Del union(byName: true)~> union1",
+				"union1, split1@Others union(byName: true)~> union2",
+				"union2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          BookID as string,",
+				"          Title as string,",
+				"          Author as string,",
+				"          Price as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
